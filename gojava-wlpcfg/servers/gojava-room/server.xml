@@ -26,5 +26,4 @@
 
     <httpEndpoint host="*" httpPort="9080" httpsPort="-1" id="defaultHttpEndpoint" />
 
-    <applicationMonitor updateTrigger="mbean" />
 </server>
