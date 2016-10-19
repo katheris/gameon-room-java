@@ -76,6 +76,19 @@ public class Application {
     private final static String FULLNAME = "fullName";
     private final static String DESCRIPTION = "description";
     
+    private final String STEP1 = "Pick up knife in right hand";
+    private final String STEP2 = "Put knife in jam.";
+    private final String STEP3 = "Scoop jam up with knife.";
+    private final String STEP4 = "Pick up bread in left hand.";
+    private final String STEP5 = "Put knife with jam on bread.";
+    private final String STEP6 = "Move knife side to side.";
+    
+    private final String STEP1CODE = "3";
+    private final String STEP2CODE = "2";
+    private final String STEP3CODE = "4";
+    private final String STEP4CODE = "1";
+    private final String STEP5CODE = "6";
+    private final String STEP6CODE = "5";
 
     private Set<String> playersInRoom = Collections.synchronizedSet(new HashSet<String>());
 
@@ -218,24 +231,73 @@ public class Application {
         System.out.println("Command received from the user, " + content);
 
         // handle look command
-        if (lowerContent.equals("/look")) {
-        	String object = null;
-            // resend the room description when we receive /look
-            JsonObjectBuilder response = Json.createObjectBuilder();
-            response.add(TYPE, LOCATION);
-            response.add(NAME, roomInfo.getName());
-            response.add(DESCRIPTION, roomInfo.getDescription());
-            sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
-			sendMessageToRoom(session, null, "There are the following objects: \n * Bread \n * Knife \n * Jam \n * Robot \n * Papers", userid);
-            return;
+        if (lowerContent.startsWith("/look")) {
+            String object = null;
+            if (lowerContent.length() > 5) {
+                object = lowerContent.substring(6);
+            }
+            if (object == null) {
+	            // resend the room description when we receive /look
+	            JsonObjectBuilder response = Json.createObjectBuilder();
+	            response.add(TYPE, LOCATION);
+	            response.add(NAME, roomInfo.getName());
+	            response.add(DESCRIPTION, roomInfo.getDescription());
+	            sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
+				sendMessageToRoom(session, null, "There are the following objects: \n\n* Bread \n* Knife \n* Jam \n * Robot \n * Papers" 
+						+ "\n\nThere is also a note tacked to the wall that says:\n\n/look and /use are your friends!", userid);
+	            return;
+            } else {
+            	switch (object) {
+	        	case "papers":
+	        		sendMessageToRoom(session, null, "A stack of papers with numbered instructions: \n "
+	        				+ STEP4CODE + ". " + STEP4 + "\n " + STEP2CODE + ". "
+	        	            + STEP2 + "\n " + STEP1CODE + ". " + STEP1 + "\n " 
+	        	            + STEP3CODE + ". " + STEP3 + "\n " + STEP6CODE + ". " + STEP6 + "\n "
+	        	            		+ STEP5CODE + ". " + STEP5, userid);
+            	    return;
+	        	case "robot":
+                    sendMessageToRoom(session, null, "A robot with a number console, a button and a screen displaying: \n ______", userid);
+                    return;
+	        	case "bread":
+	        		sendMessageToRoom(session, null, "A loaf of sliced bread, not very interesting by itself.", userid);
+	        	    return;
+	        	case "knife":
+	        		sendMessageToRoom(session, null, "A blunt knife, you don't feel like examining it further.", userid);
+	        	    return;
+	        	case "jam":
+	        		sendMessageToRoom(session, null, "A jar of jam, not very interesting by itself.", userid);
+	        	    return;
+	        	default:
+            		sendMessageToRoom(session, null, "There is not object called " + object
+            				+ "in this room, try looking at something else", userid);
+                    return;
+            	}
+            }
         }
         
-        if (lowerContent.startsWith("/look") && !lowerContent.equals("look")) {
-        	String object = lowerContent.substring(6);
-        	switch (object) {
-        	case "Bread":
-        		sendMessageToRoom(session, null, "A bag of sliced bread.", userid);
-        	}
+        if (lowerContent.startsWith("/use")) {
+            String object = null;
+            if (lowerContent.length() > 5) {
+                object = lowerContent.substring(5);
+            }
+            if (object == null) {
+                sendMessageToRoom(session, null, "You look around for something to use and lose your train of thought...", userid);
+            } else if (object.equals("robot")){
+                sendMessageToRoom(session, null, "You press a button on the robot and the screen displays:"
+                        + "\n Command order required, please try again.", userid);
+            } else if (object.startsWith("robot")) {
+                String code = object.substring(6);
+                if (code.equals(STEP1CODE + STEP2CODE + STEP3CODE + STEP4CODE + STEP5CODE + STEP6CODE)) {
+                    sendMessageToRoom(session, null, "You punch some numbers into the console on the Robot and press a button, "
+                            + "the robot makes a jam sandwich!", userid);
+                } else {
+                    sendMessageToRoom(session, null, "You punch some numbers into the console on the Robot and press a button, "
+                            + "the console displays: \n ERROR: Incorrect commands", userid);
+                }
+            } else {
+                sendMessageToRoom(session, null, "You walk over to the object to use it, but lose your train of thought...", userid);
+            }
+            return;
         }
 
         if (lowerContent.startsWith("/go")) {
@@ -272,6 +334,15 @@ public class Application {
         // everything else is just chat.
         sendChatMessage(session, content, userid, username);
         return;
+    }
+    
+    private void jamSandwich() {
+        /*Pick up bread in right hand
+    	Pick up knife in left hand 
+    	Put knife in jam
+    	Scoop jam up with knife
+    	Put knife with jam on bread
+    	Move knife side to side*/
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
