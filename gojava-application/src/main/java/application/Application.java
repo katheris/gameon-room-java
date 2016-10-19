@@ -75,6 +75,7 @@ public class Application {
     private final static String EXIT_ID = "exitId";
     private final static String FULLNAME = "fullName";
     private final static String DESCRIPTION = "description";
+    
 
     private Set<String> playersInRoom = Collections.synchronizedSet(new HashSet<String>());
 
@@ -164,7 +165,7 @@ public class Application {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Room methods..
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
     // add a new player to the room
     private void addNewPlayer(Session session, String json) throws IOException {
         if (session.getUserProperties().get(USERNAME) != null) {
@@ -218,6 +219,7 @@ public class Application {
 
         // handle look command
         if (lowerContent.equals("/look")) {
+        	String object = null;
             // resend the room description when we receive /look
             JsonObjectBuilder response = Json.createObjectBuilder();
             response.add(TYPE, LOCATION);
@@ -226,6 +228,14 @@ public class Application {
             sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
 			sendMessageToRoom(session, null, "There are the following objects: \n * Bread \n * Knife \n * Jam \n * Robot \n * Papers", userid);
             return;
+        }
+        
+        if (lowerContent.startsWith("/look") && !lowerContent.equals("look")) {
+        	String object = lowerContent.substring(6);
+        	switch (object) {
+        	case "Bread":
+        		sendMessageToRoom(session, null, "A bag of sliced bread.", userid);
+        	}
         }
 
         if (lowerContent.startsWith("/go")) {
