@@ -84,7 +84,7 @@ public class Application {
 
     private RoomInfo roomInfo;
     // Set this so that the room can find out where it is
-    private String siteId = "";
+    private String siteId = "7b0d5c1eaeca86c5aa48458f0e14ce3f";
     
     @PostConstruct
     public void init() {
@@ -97,21 +97,21 @@ public class Application {
             System.out.println("The room has no Site Id. Please set the Site Id so that the room can get information about itself");
         }
 
-        // If the room doesn;t knwo these things, use defaults
+        // If the room doesn't know these things, use defaults
         if (roomInfo == null) {
             roomInfo = new RoomInfo();
         }
         
         if (roomInfo.getName() == null) {
-            roomInfo.setName("A room with no name.");
+            roomInfo.setName("Placeholder for jam sandwich.");
         }
         
         if (roomInfo.getFullName() == null) {
-            roomInfo.setFullName("A room with no full name");
+            roomInfo.setFullName("A room with no full name, should be jam sandwich");
         }
         
         if (roomInfo.getDescription() == null) {
-            roomInfo.setDescription("A room with no description");
+            roomInfo.setDescription("You are in a room with a knife, some jam and some bread. There is a robot in the corner and a stack of papers on a desk.");
         }
     }
     
@@ -224,6 +224,7 @@ public class Application {
             response.add(NAME, roomInfo.getName());
             response.add(DESCRIPTION, roomInfo.getDescription());
             sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
+			sendMessageToRoom(session, null, "There are the following objects: \n * Bread \n * Knife \n * Jam \n * Robot \n * Papers", userid);
             return;
         }
 

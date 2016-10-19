@@ -39,7 +39,7 @@
         <!-- <cf.password></cf.password> -->
 
         <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
-        <app.name>gameon-room-java</app.name>
+        <app.name>kategoroom</app.name>
     </properties>
 
     <repositories>
