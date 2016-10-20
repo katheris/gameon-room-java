@@ -76,7 +76,7 @@ public class Application {
     private final static String FULLNAME = "fullName";
     private final static String DESCRIPTION = "description";
     
-    private final String STEP1 = "Pick up knife in right hand";
+    private final String STEP1 = "Pick up knife in right hand.";
     private final String STEP2 = "Put knife in jam.";
     private final String STEP3 = "Scoop jam up with knife.";
     private final String STEP4 = "Pick up bread in left hand.";
@@ -179,6 +179,21 @@ public class Application {
     // Room methods..
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    private void sendLocation(Session session, String userid) {
+        // now send the room info
+        // this is the required response to a roomHello event, which is the
+        // only reason we are in this method.
+        JsonObjectBuilder response = Json.createObjectBuilder();
+        response.add(TYPE, LOCATION);
+        // now send the room info
+        // this is the required response to a roomHello event, which is the
+        // only reason we are in this method.
+        response.add(NAME, roomInfo.getName());
+        response.add(FULLNAME, roomInfo.getFullName());
+        response.add(DESCRIPTION, roomInfo.getDescription());
+        sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
+    }
+    
     // add a new player to the room
     private void addNewPlayer(Session session, String json) throws IOException {
         if (session.getUserProperties().get(USERNAME) != null) {
@@ -192,20 +207,9 @@ public class Application {
             // broadcast that the user has entered the room
             sendMessageToRoom(session, "Player " + username + " has entered the room", "You have entered the room",
                               userid);
-
-            // now send the room info
-            // this is the required response to a roomHello event, which is the
-            // only reason we are in this method.
-            JsonObjectBuilder response = Json.createObjectBuilder();
-            response.add(TYPE, LOCATION);
-            // now send the room info
-            // this is the required response to a roomHello event, which is the
-            // only reason we are in this method.
-            response.add(NAME, roomInfo.getName());
-            response.add(FULLNAME, roomInfo.getFullName());
-            response.add(DESCRIPTION, roomInfo.getDescription());
-            sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
+            sendLocation(session, userid);
         }
+        
     }
 
     // remove a player from the room.
@@ -256,7 +260,7 @@ public class Application {
 	        	            		+ STEP5CODE + ". " + STEP5, userid);
             	    return;
 	        	case "robot":
-                    sendMessageToRoom(session, null, "A robot with a number console, a button and a screen displaying: \n\n------", userid);
+                    sendMessageToRoom(session, null, "A robot with a number console, a button and a screen displaying: \n\nEnter a 6-digit number.", userid);
                     return;
 	        	case "bread":
 	        		sendMessageToRoom(session, null, "A loaf of sliced bread, not very interesting by itself.", userid);
@@ -292,7 +296,7 @@ public class Application {
                             + "the robot makes a jam sandwich!", userid);
                 } else {
                     sendMessageToRoom(session, null, "You punch some numbers into the console on the Robot and press a button, "
-                            + "the console displays: \n\n ERROR: Incorrect commands", userid);
+                            + "the console displays: \n\n ERROR: Incorrect code.", userid);
                 }
             } else {
                 sendMessageToRoom(session, null, "You walk over to the object to use it, but lose your train of thought...", userid);
