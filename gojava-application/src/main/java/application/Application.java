@@ -243,20 +243,20 @@ public class Application {
 	            response.add(NAME, roomInfo.getName());
 	            response.add(DESCRIPTION, roomInfo.getDescription());
 	            sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
-				sendMessageToRoom(session, null, "There are the following objects: \n\n* Bread \n* Knife \n* Jam \n * Robot \n * Papers" 
+				sendMessageToRoom(session, null, "There are the following objects: \n\n* Bread \n* Knife \n* Jam \n* Robot \n* Papers" 
 						+ "\n\nThere is also a note tacked to the wall that says:\n\n/look and /use are your friends!", userid);
 	            return;
             } else {
             	switch (object) {
 	        	case "papers":
-	        		sendMessageToRoom(session, null, "A stack of papers with numbered instructions: \n "
+	        		sendMessageToRoom(session, null, "A stack of papers with numbered instructions: \n\n "
 	        				+ STEP4CODE + ". " + STEP4 + "\n " + STEP2CODE + ". "
 	        	            + STEP2 + "\n " + STEP1CODE + ". " + STEP1 + "\n " 
 	        	            + STEP3CODE + ". " + STEP3 + "\n " + STEP6CODE + ". " + STEP6 + "\n "
 	        	            		+ STEP5CODE + ". " + STEP5, userid);
             	    return;
 	        	case "robot":
-                    sendMessageToRoom(session, null, "A robot with a number console, a button and a screen displaying: \n ______", userid);
+                    sendMessageToRoom(session, null, "A robot with a number console, a button and a screen displaying: \n\n------", userid);
                     return;
 	        	case "bread":
 	        		sendMessageToRoom(session, null, "A loaf of sliced bread, not very interesting by itself.", userid);
@@ -292,7 +292,7 @@ public class Application {
                             + "the robot makes a jam sandwich!", userid);
                 } else {
                     sendMessageToRoom(session, null, "You punch some numbers into the console on the Robot and press a button, "
-                            + "the console displays: \n ERROR: Incorrect commands", userid);
+                            + "the console displays: \n\n ERROR: Incorrect commands", userid);
                 }
             } else {
                 sendMessageToRoom(session, null, "You walk over to the object to use it, but lose your train of thought...", userid);
