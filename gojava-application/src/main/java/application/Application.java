@@ -98,7 +98,7 @@ public class Application {
 
     private RoomInfo roomInfo;
     // Set this so that the room can find out where it is
-    private String siteId = "7b0d5c1eaeca86c5aa48458f0e14ce3f";
+    private String siteId = "";//"7b0d5c1eaeca86c5aa48458f0e14ce3f";
     
     @PostConstruct
     public void init() {
@@ -139,7 +139,7 @@ public class Application {
         System.out.println("A new connection has been made to the room.");
 
         //send ack
-        sendRemoteTextMessage(session, "ack,{\"version\":[1]}");
+        sendRemoteTextMessage(session, "ack,{\"version\":[1]");
     }
 
     @OnClose
@@ -246,6 +246,9 @@ public class Application {
 	            response.add(TYPE, LOCATION);
 	            response.add(NAME, roomInfo.getName());
 	            response.add(DESCRIPTION, roomInfo.getDescription());
+				JsonObjectBuilder commands = Json.createObjectBuilder();
+				commands.add("/look object", "Examine an object.");
+				response.add("commands", commands);
 	            sendRemoteTextMessage(session, "player," + userid + "," + response.build().toString());
 				sendMessageToRoom(session, null, "There are the following objects: \n\n* Bread \n* Knife \n* Jam \n* Robot \n* Papers" 
 						+ "\n\nThere is also a note tacked to the wall that says:\n\n/look and /use are your friends!", userid);
