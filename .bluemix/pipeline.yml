@@ -1,0 +1,19 @@
+---
+stages:
+- name: BUILD
+  inputs:
+  - type: git
+    branch: master
+    service: ${BASE_REPO}
+  triggers:
+  - type: commit
+  jobs:
+  - name: Build
+    type: builder
+    build_type: shell
+    script: |
+      #!/bin/bash
+      echo "Building"
+      export JAVA_HOME=$JAVA8_HOME
+      chmod +x gradlew
+      ./gradlew build --console=plain
