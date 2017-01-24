@@ -15,5 +15,23 @@ stages:
       #!/bin/bash
       echo "Building"
       export JAVA_HOME=$JAVA8_HOME
-      chmod +x gradlew
-      ./gradlew build --console=plain
+      mvn install
+- name: Deploy
+  inputs:
+  - type: job
+    stage: BUILD
+    job: Build
+    dir_name: null
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy
+    type: deployer
+    target:
+      region_id: ${PROD_REGION_ID}
+      organization: ${PROD_ORG_NAME}
+      space: ${PROD_SPACE_NAME}
+      application: ${CF_APP_NAME}
+    script: |
+      #!/bin/bash
+      cf push "${CF_APP}" -p target/gameon-room-java.zip
