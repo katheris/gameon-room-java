@@ -21,7 +21,7 @@
             "type": "string"
         },
        "prod-app-name": {
-            "description": "The name of your Hello World app",
+            "description": "The name of your app in Bluemix",
             "type": "string"
         }
     },
@@ -30,7 +30,7 @@
        {
           "type": "validator",
           "url": "/devops/setup/bm-helper/helper.html"
-       },        
+       },
         {
           "type": "text",
           "readonly": false,

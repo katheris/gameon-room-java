@@ -1,6 +1,6 @@
 ---
 stages:
-- name: BUILD
+- name: Build Application
   inputs:
   - type: git
     branch: master
@@ -13,19 +13,18 @@ stages:
     build_type: shell
     script: |
       #!/bin/bash
-      echo "Building"
       export JAVA_HOME=$JAVA8_HOME
       mvn install
 - name: Deploy
   inputs:
   - type: job
-    stage: BUILD
+    stage: Build Application
     job: Build
     dir_name: null
   triggers:
   - type: stage
   jobs:
-  - name: Deploy
+  - name: Deploy As Cloud Foundry App
     type: deployer
     target:
       region_id: ${PROD_REGION_ID}
