@@ -1,7 +1,4 @@
 ---
-default_locale: en
-locales:
-  $ref: locales.yml
 name: "Game On Java Sample Cloud Foundry toolchain"
 description: "This toolchain is designed to generatie a pipeline to build the Game On Sample Java room and deploy it as an instant runtime app."
 version: 0.1
@@ -15,7 +12,6 @@ required:
 base-repo:
   service_id: githubpublic
   parameters:
-    repo_name: "{{name}}"
     repo_url: "{{repository}}"
     type: link
     has_issues: true
@@ -24,7 +20,7 @@ base-repo:
 sample-build:
   service_id: pipeline
   parameters:
-    name: "{{name}}"
+    name: "{{deploy.parameters.prod-app-name}} pipeline"
     ui-pipeline: true
     configuration:
      content: $file(pipeline.yml)
