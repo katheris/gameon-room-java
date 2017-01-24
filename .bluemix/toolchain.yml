@@ -1,6 +1,6 @@
 ---
 name: "Game On Java Sample Cloud Foundry toolchain"
-description: "This toolchain is designed to generatie a pipeline to build the Game On Sample Java room and deploy it as an instant runtime app."
+description: "This toolchain is designed to generate a pipeline to build the Game On Sample Java room and deploy it as an instant runtime app."
 version: 0.1
 image: data:image/svg+xml;base64,$file(toolchain.svg,base64)
 icon: data:image/svg+xml;base64,$file(icon.svg,base64)
@@ -20,7 +20,7 @@ base-repo:
 sample-build:
   service_id: pipeline
   parameters:
-    name: "{{deploy.parameters.prod-app-name}} pipeline"
+    name: "{{name}}"
     ui-pipeline: true
     configuration:
      content: $file(pipeline.yml)
