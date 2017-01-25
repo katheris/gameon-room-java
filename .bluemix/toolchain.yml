@@ -12,6 +12,7 @@ required:
 base-repo:
   service_id: githubpublic
   parameters:
+    repo_name: "{{name}}"
     repo_url: "{{repository}}"
     type: link
     has_issues: true
@@ -45,4 +46,4 @@ deploy:
     $ref: deploy.json
   service-category: pipeline
   parameters:
-    prod-app-name: "{{name}}"
+    prod-app-name: "{{base-repo.parameters.repo_name}}"
