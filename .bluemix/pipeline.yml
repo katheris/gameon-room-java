@@ -1,0 +1,36 @@
+---
+stages:
+- name: Build Application
+  inputs:
+  - type: git
+    branch: master
+    service: ${BASE_REPO}
+  triggers:
+  - type: commit
+  jobs:
+  - name: Build
+    type: builder
+    build_type: shell
+    script: |
+      #!/bin/bash
+      export JAVA_HOME=$JAVA8_HOME
+      mvn install
+- name: Deploy
+  inputs:
+  - type: job
+    stage: Build Application
+    job: Build
+    dir_name: null
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy As Cloud Foundry App
+    type: deployer
+    target:
+      region_id: ${PROD_REGION_ID}
+      organization: ${PROD_ORG_NAME}
+      space: ${PROD_SPACE_NAME}
+      application: ${CF_APP_NAME}
+    script: |
+      #!/bin/bash
+      cf push "${CF_APP}" -p target/gameon-room-java.zip
